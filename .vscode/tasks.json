@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cmake",
+			"label": "CMake Task: configure",
+			"command": "configure",
+			"preset": "${command:cmake.activeConfigurePresetName}",
+			"problemMatcher": [],
+			"detail": "CMake configure task"
+		},
+		{
+			"type": "cmake",
+			"label": "CMake Task: build",
+			"dependsOn": "CMake Task: configure",
+			"command": "build",
+			"targets": [
+				"all"
+			],
+			"preset": "${command:cmake.activeBuildPresetName}",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"detail": "CMake build task"
+		}
+	]
+}

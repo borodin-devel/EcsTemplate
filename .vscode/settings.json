@@ -1,0 +1,8 @@
+{
+    "cmake.configureOnOpen": true,
+    "cmake.useCMakePresets": "always",
+    "cmake.exportCompileCommandsFile": true,
+    "files.associations": {
+        "filesystem": "cpp"
+    }
+}
