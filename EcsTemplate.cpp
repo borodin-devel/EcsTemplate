@@ -3,6 +3,8 @@
 
 #include "EcsTemplate.h"
 
+#include "spdlog/spdlog.h"
+
 #include "buildinfo.h"
 
 #include <filesystem>
@@ -16,6 +18,8 @@ int main()
               << "Built: " << BuildInfo::Timestamp << '\n'
               << "Commit SHA: " << BuildInfo::CommitSHA << '\n'
               << "Path: " << g_currentWorkingDir.string() << std::endl;
+
+    spdlog::info("Welcome to spdlog!");
 
     return 0;
 }
