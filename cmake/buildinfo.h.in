@@ -3,7 +3,15 @@
 #include <string>
 
 struct BuildInfo {
-    static inline const std::string CommitSHA = "@COMMIT_SHA@";
-    static inline const std::string Timestamp = "@TIMESTAMP@";
-    static inline const std::string Version = "@PROJECT_VERSION@";
+    static inline const std::string m_projectName = "@PROJECT_NAME@";
+    static inline const std::string m_version = "@PROJECT_VERSION@";
+    static inline const std::string m_timestamp = "@TIMESTAMP@";
+    static inline const std::string m_buildType = "@CMAKE_BUILD_TYPE@";
+    static inline const std::string m_commitShaSum = "@COMMIT_SHA@";
+
+#ifdef BUILD_TYPE_DEBUG
+    static inline const std::string m_workspaceDir = "@CMAKE_SOURCE_DIR@";
+#else
+    static inline const std::string m_workspaceDir; // Just to keep Intellisense happy
+#endif
 };

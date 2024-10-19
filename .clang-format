@@ -5,3 +5,10 @@ BasedOnStyle: WebKit
 ColumnLimit: '120'
 TabWidth: '4'
 UseTab: Never
+IndentPPDirectives: BeforeHash
+# Force function parameters to be aligned vertically
+BinPackParameters: false
+AllowAllParametersOfDeclarationOnNextLine: false
+# Optionally, you can apply the same for function calls
+BinPackArguments: false
+AllowAllArgumentsOnNextLine: false

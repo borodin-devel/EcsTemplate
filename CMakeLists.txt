@@ -2,13 +2,16 @@
 # project specific logic here.
 #
 
+message(STATUS "Build information")
 message("CMake version: ${CMAKE_VERSION}")
 cmake_minimum_required(VERSION 3.18)
 
 project("EcsTemplate" VERSION 0.1)
-message(STATUS "Project version: ${PROJECT_VERSION}")
+message("Project version: ${PROJECT_VERSION}")
 
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS ON)
 
 # Enable Hot Reload for MSVC compilers if supported.
 if(POLICY CMP0141)
@@ -20,7 +23,13 @@ if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-message("\nInlining CMake scripts")
+message("Project build type: ${CMAKE_BUILD_TYPE}")
+
+if(MSVC)
+    message("MSVC Version: ${MSVC_VERSION}")
+endif()
+
+message(STATUS "Inlining CMake scripts")
 
 # Project specific CMake scripts
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
@@ -31,10 +40,10 @@ include(CMakePrintHelpers)
 include(FetchContent)
 
 # Local CMake scripts
-include(BuildInfo)
+include(buildinfo)
 
 # Include sub-projects
-message("\nFetching dependencies")
+message(STATUS "Fetching dependencies")
 
 # spdlog
 FetchContent_Declare(
@@ -66,10 +75,37 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(raylib_cpp)
 
 # raylib-cpp end
+message(STATUS "Building the project")
 
 # Add source to this project's executable.
-add_executable(EcsTemplate "EcsTemplate.cpp" "EcsTemplate.h")
+add_executable(EcsTemplate
+    "main.cpp"
+    "src/globals.hpp"
+    "src/globals.cpp"
+    "src/logger.hpp"
+    "src/logger.cpp"
+    "src/platform/platform_base.hpp"
+    "src/platform/platform_base.cpp"
+    "src/platform/platform_windows.hpp"
+    "src/platform/platform_windows.cpp"
+)
+
+target_compile_definitions(EcsTemplate PRIVATE $<$<CONFIG:Debug>:BUILD_TYPE_DEBUG>)
+
+# Enable Unicode for Windows platforms
+if(WIN32)
+    target_compile_definitions(EcsTemplate PRIVATE UNICODE _UNICODE)
+endif()
+
 BuildInfo(EcsTemplate)
+
+if(WIN32)
+    target_link_libraries(EcsTemplate
+        PRIVATE
+        dbghelp
+    )
+endif()
+
 target_link_libraries(EcsTemplate
     PRIVATE
     spdlog::spdlog
