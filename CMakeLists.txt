@@ -84,6 +84,8 @@ add_executable(EcsTemplate
     "src/globals.cpp"
     "src/logger.hpp"
     "src/logger.cpp"
+    "src/console.hpp"
+    "src/console.cpp"
     "src/platform/platform_base.hpp"
     "src/platform/platform_base.cpp"
     "src/platform/platform_windows.hpp"

@@ -56,7 +56,7 @@ std::string getStackTrace()
 // Function to display the error and stack trace in a message box
 void showErrorWindow(const std::string& errorMessage)
 {
-    std::string message = "An unhandled exception occurred:\n\n" + errorMessage + "\n\nCall Stack:\n" + getStackTrace();
+    std::string message = "Error occurred:\n\n" + errorMessage + "\n\nCall Stack:\n" + getStackTrace();
     MessageBoxA(NULL, message.c_str(), "Error: Unhandled Exception", MB_ICONERROR | MB_OK);
 }
 
@@ -76,8 +76,9 @@ std::string getExecutablePath()
     DWORD length = GetModuleFileNameW(NULL, buffer, MAX_PATH);
 
     if (length == 0) {
-        std::cerr << "Error getting executable path. Error code: " << GetLastError() << std::endl;
-        return "";
+        std::string message = "Can't get executable path. Code: " + std::to_string(GetLastError()) + '\n';
+        showErrorWindow(message);
+        _exit(1);
     }
 
     std::wstring widePath(buffer, length);
