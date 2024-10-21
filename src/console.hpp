@@ -15,9 +15,19 @@ struct Console {
 
     std::filesystem::path m_logFilePath;
     std::ifstream m_logFileStream;
-    Font m_font;
 
+    Font m_font;
+    float m_fontSize = 18.0f;
+    float m_spacing = 1.0f;
+    float m_lineSpacing = 5.0f;
+    float m_charWidth = 0.0f;
+    float m_charHeight = 0.0f;
+
+    Rectangle m_consoleArea;
     std::deque<std::string> m_consoleLines;
+    int m_columns = 0;
+    int m_lines = 0;
+    int m_totalCharacters = 0;
 
     std::streamoff m_lastFileSize = 0;
     std::streamoff m_currentFileSize = 0;

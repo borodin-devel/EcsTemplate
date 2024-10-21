@@ -13,6 +13,19 @@ Console::Console(std::filesystem::path& logFilePath)
         / std::filesystem::canonical("resources/fonts/Fira_Code_v6.2/ttf/FiraCode-Regular.ttf");
     m_font = LoadFont(consoleFontPath.string().c_str());
 
+    Vector2 charSize = MeasureTextEx(m_font, "A", m_fontSize, m_spacing);
+    m_charWidth = charSize.x;
+    m_charHeight = charSize.y;
+
+    m_consoleArea = { 0, 0, static_cast<float>(GetScreenWidth()), 200 };
+
+    // Calculate columns and lines
+    m_columns = static_cast<int>((m_consoleArea.width + m_spacing - 1) / (m_charWidth + m_spacing));
+    m_lines = static_cast<int>((m_consoleArea.height + m_lineSpacing - 1) / (m_charHeight + m_lineSpacing));
+    m_totalCharacters = m_columns * m_lines;
+
+    spdlog::info("Console capacity: columns = {}, lines = {}, overall = {}", m_columns, m_lines, m_totalCharacters);
+
     openLogFileStream();
 }
 
@@ -187,17 +200,19 @@ void Console::getLastNLines(size_t n)
 }
 
 // Function to read new lines from the open file stream
-void Console::readNewLogEntries() { getLastNLines(10); }
+void Console::readNewLogEntries() { getLastNLines(m_lines); }
 
 // Function to draw the console
 void Console::render()
 {
     if (m_isActive) {
-        DrawRectangle(0, 0, GetScreenWidth(), 200, BLACK);
+        Color color = BLACK;
+        color.a = 204;
+        DrawRectangleRec(m_consoleArea, color);
         int y = 1;
         for (const auto& line : m_consoleLines) {
-            DrawTextEx(m_font, line.c_str(), Vector2 { 1, static_cast<float>(y) }, 20, 1, RAYWHITE);
-            y += 21;
+            DrawTextEx(m_font, line.c_str(), Vector2 { 1, static_cast<float>(y) }, m_fontSize, m_spacing, WHITE);
+            y += m_charHeight + m_lineSpacing;
         }
     }
 }
