@@ -84,6 +84,7 @@ void initialize()
     #endif
 #endif
 
+    g_cwd = std::filesystem::canonical(g_cwd);
     std::filesystem::current_path(g_cwd);
 }
 

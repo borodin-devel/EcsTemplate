@@ -17,7 +17,7 @@ int main()
 
     Game::Platform::Base::initialize();
     auto logPath = Game::Logger::setupLogger(Game::Platform::Base::g_cwd);
-    Game::Console console(logPath);
+    SetTraceLogCallback(Game::Logger::customRaylibLogHandler);
 
     spdlog::info("{}", BuildInfo::m_projectName);
     spdlog::info("Version: {} {}", BuildInfo::m_version, BuildInfo::m_buildType);
@@ -28,8 +28,8 @@ int main()
     int screenWidth = 800;
     int screenHeight = 600;
 
-    SetTraceLogCallback(Game::Logger::customRaylibLogHandler);
     raylib::Window window(screenWidth, screenHeight, "raylib-cpp - basic window");
+    Game::Console console(logPath);
 
     SetTargetFPS(60);
 
@@ -39,7 +39,7 @@ int main()
         }
 
         if (IsKeyPressed(KEY_SPACE)) {
-            spdlog::info("SPACEEE!!");
+            spdlog::critical("SPACEEE!!");
         }
 
         console.update();
